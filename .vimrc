@@ -54,7 +54,6 @@ let NERDTreeWinSize=30
 map <F2> :NERDTreeToggle<CR>
 
 "" 配置YouCompleteMe
-let g:ycm_server_python_interpreter='/usr/local/bin/python3'
 let g:ycm_rust_src_path="/Users/dongxuewu/RustSrc/src"
 " 设置在下面几种格式的文件上屏蔽ycm
 let g:ycm_filetype_blacklist = {
