@@ -1,3 +1,4 @@
+" set expandtab
 set expandtab
 set tabstop=4
 set softtabstop=4
@@ -31,21 +32,6 @@ set shellpipe=2>/dev/null>
 set grepprg=rg\ --column\ $*
 set grepformat=%f:%l:%c:%m
 
-colorscheme codeschool
-let $PATH='/Users/dongxuewu/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin'
-
-""""""""""""""""""""'
-"" 开启rust的自动reformat的功能
-let g:rustfmt_autosave = 1
-let g:racer_experimental_completer = 1
-"" 手动补全和定义跳转
-set hidden
-"" 这一行指的是你编译出来的racer所在的路径
-let g:racer_cmd = "$HOME/.cargo/bin/racer"
-"" 这里填写的就是我们在1.2.1中让你记住的目录
-
-"""""""""""""""""""""
-
 "" 适配airline
 set laststatus=2
 "" 配置NERDTree
@@ -53,6 +39,8 @@ let NERDTreeWinPos='left'
 let NERDTreeWinSize=30
 map <F2> :NERDTreeToggle<CR>
 
+"" 配置YouCompleteMe
+" 设置在下面几种格式的文件上屏蔽ycm
 "" 配置YouCompleteMe
 let g:ycm_rust_src_path="/Users/dongxuewu/RustSrc/src"
 " 设置在下面几种格式的文件上屏蔽ycm
@@ -102,18 +90,21 @@ nmap <F8> :TagbarToggle<CR>
 let g:tagbar_ctags_bin = 'ctags'
 let g:tagbar_autofocus = 1
 
-" markdown preview
-let g:mkdp_path_to_chrome = "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome"
 
 set nocompatible	" Use Vim defaults instead of 100% vi compatibility
 filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+
+if has('win32')
+    set rtp+=$HOME/.vim/bundle/Vundle.vim/
+    call vundle#begin("$HOME/.vim/bundle/")
+else
+    " markdown preview
+    let g:mkdp_path_to_chrome = "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome"
+
+    set rtp+=~/.vim/bundle/Vundle.vim/
+    call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'racer-rust/vim-racer'
-Plugin 'rust-lang/rust.vim'
 Plugin 'bling/vim-airline'
 Plugin 'scrooloose/nerdtree'
 Plugin 'tpope/vim-fugitive'
@@ -123,7 +114,11 @@ Plugin 'vim-scripts/groovyindent'
 Plugin 'pangloss/vim-javascript'
 Plugin 'skywind3000/asyncrun.vim'
 Plugin 'aklt/plantuml-syntax'
+Plugin 'antlypls/vim-colors-codeschool'
 Plugin 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'NLKNguyen/papercolor-theme'
+
 call vundle#end()
 
 filetype plugin on
@@ -133,3 +128,16 @@ syntax on
 au BufWrite /private/tmp/crontab.* set nowritebackup nobackup
 " Don't write backup file if vim is being called by "chpass"
 au BufWrite /private/etc/pw.* set nowritebackup nobackup
+
+if has('gui_running')
+    " GUI colors
+    set guioptions-=m
+    set guioptions-=T
+    set guifont=Source\ Code\ Variable:h11
+    colorscheme codeschool
+else
+    " Non-GUI (terminal) colors
+    set t_Co=256
+    colorscheme PaperColor
+    set background=dark
+endif
