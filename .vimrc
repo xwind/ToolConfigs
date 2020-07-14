@@ -1,4 +1,3 @@
-" set expandtab
 set expandtab
 set tabstop=4
 set softtabstop=4
@@ -32,7 +31,29 @@ set shellpipe=2>/dev/null>
 set grepprg=rg\ --column\ $*
 set grepformat=%f:%l:%c:%m
 
+" cursor
+" https://vim.fandom.com/wiki/Configuring_the_cursor
+" 1 or 0 -> blinking block
+" 2 solid block
+" 3 -> blinking underscore
+" 4 solid underscore
+" Recent versions of xterm (282 or above) also support
+" 5 -> blinking vertical bar
+" 6 -> solid vertical bar
+set cursorline
+set cursorline cursorcolumn
+
+if &term =~ '^xterm'
+" normal mode
+let &t_EI .= "\<Esc>[0 q"
+" insert mode
+let &t_SI .= "\<Esc>[6 q"
+endif
+
+
+
 "" 适配airline
+let g:airline#extensions#tabline#enabled = 1
 set laststatus=2
 "" 配置NERDTree
 let NERDTreeWinPos='left'
@@ -57,8 +78,6 @@ nnoremap <S-w> :Gblame<CR>
 
 "" 配置syntastic
 auto BufRead,BufNewFile *.go set filetype=go
-let g:syntastic_error_symbol='>>'
-let g:syntastic_warning_symbol='>'
 let g:syntastic_check_on_open=1
 let g:syntastic_check_on_wq=0
 let g:syntastic_enable_highlighting=1
@@ -72,18 +91,12 @@ let g:syntastic_html_checkers=['tidy', 'jshint']
 highlight SyntasticErrorSign guifg=white guibg=black
 
 " to see error location list
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 let g:syntastic_always_populate_loc_list = 0
 let g:syntastic_auto_loc_list = 0
 let g:syntastic_loc_list_height = 5
-function! ToggleErrors()
-    let old_last_winnr = winnr('$')
-    lclose
-    if old_last_winnr == winnr('$')
-        " Nothing was closed, open syntastic error location panel
-        Errors
-    endif
-endfunction
-nnoremap <Leader>s :call ToggleErrors()<cr>
 
 " 配置 tagbar
 nmap <F8> :TagbarToggle<CR>
@@ -103,6 +116,7 @@ else
 
     set rtp+=~/.vim/bundle/Vundle.vim/
     call vundle#begin()
+endif
 
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'bling/vim-airline'
@@ -116,8 +130,7 @@ Plugin 'skywind3000/asyncrun.vim'
 Plugin 'aklt/plantuml-syntax'
 Plugin 'antlypls/vim-colors-codeschool'
 Plugin 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'NLKNguyen/papercolor-theme'
+Plugin 'morhetz/gruvbox'
 
 call vundle#end()
 
@@ -138,6 +151,6 @@ if has('gui_running')
 else
     " Non-GUI (terminal) colors
     set t_Co=256
-    colorscheme PaperColor
+    colorscheme gruvbox
     set background=dark
 endif
