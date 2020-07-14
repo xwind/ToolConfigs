@@ -131,6 +131,7 @@ Plugin 'aklt/plantuml-syntax'
 Plugin 'antlypls/vim-colors-codeschool'
 Plugin 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plugin 'morhetz/gruvbox'
+Plugin 'sonph/onehalf', {'rtp': 'vim/'}
 
 call vundle#end()
 
@@ -149,8 +150,17 @@ if has('gui_running')
     set guifont=Source\ Code\ Variable:h11
     colorscheme codeschool
 else
-    " Non-GUI (terminal) colors
     set t_Co=256
-    colorscheme gruvbox
-    set background=dark
+    " Non-GUI (terminal) colors
+    if exists('+termguicolors')
+        let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+        let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+        set termguicolors
+        colorscheme onehalfdark
+        let g:airline_theme='onehalfdark'
+        "let g:lightline.colorscheme='onehalfdark'
+    else
+        colorscheme gruvbox
+        set background=dark
+    endif
 endif
